@@ -1,15 +1,18 @@
 import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+import { Link, Outlet } from 'react-router-dom';
 import './App.css';
+import { NavBar } from './NavBar';
 
 function App() {
   const [user, setUser] = useState(null);
+  console.log(user);
 
   return (
     <>
-      <h1>dashboard</h1>
-      {user ? <h2>{user.name}</h2> : <h2>please log in</h2>}
+      <NavBar user={user} />
+      <main>
+        <Outlet context={[user, setUser]} />
+      </main>
     </>
   );
 }
