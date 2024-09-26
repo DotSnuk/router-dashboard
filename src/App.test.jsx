@@ -1,10 +1,23 @@
 import { render, screen } from '@testing-library/react';
-import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
-import { describe, it, expect } from 'vitest';
+import {
+  MemoryRouter,
+  Route,
+  Routes,
+  useOutletContext,
+} from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
 import App from './App';
 import { Login } from './Login';
 import { Dashboard } from './Dashboard';
 import userEvent from '@testing-library/user-event';
+
+// vi.mock('react-router-dom', async () => {
+//   const actual = await vi.importActual('react-router-dom');
+//   return {
+//     ...actual,
+//     useOutletContext: vi.fn(),
+//   };
+// });
 
 describe('App', () => {
   it('renders headline', async () => {
@@ -78,7 +91,7 @@ describe('App', () => {
     expect(screen.getByLabelText(/username/i)).toBeInTheDocument();
   });
 
-  it('providing username redirects user to dashboard with that user logged in', async () => {
+  it('providing username redirects user to dashboard with that user logged in and update navbar', async () => {
     const user = userEvent.setup();
 
     render(
@@ -103,10 +116,11 @@ describe('App', () => {
       name: /welcome snuken/i,
     });
 
-    expect(welcomeMsg).toBeInTheDocument();
+    const logoutLink = await screen.findByRole('link', {
+      name: /logout/i,
+    });
 
-    // expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
-    //   /welcome snuken/i,
-    // );
+    expect(welcomeMsg).toBeInTheDocument();
+    expect(logoutLink).toBeInTheDocument();
   });
 });

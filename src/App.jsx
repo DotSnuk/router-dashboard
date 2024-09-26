@@ -5,7 +5,6 @@ import { NavBar } from './NavBar';
 
 function App() {
   const [user, setUser] = useState(null);
-  console.log(user);
 
   return (
     <>
